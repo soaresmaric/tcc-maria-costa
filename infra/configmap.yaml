@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: tcc-config
-  namespace: default
+  namespace: prometheus
 data:
   application.properties: |
     # Configurações da aplicação
