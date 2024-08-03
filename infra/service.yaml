@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tcc-service
+  labels:
+    app: tcc
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '8080'
+    prometheus.io/path: '/actuator/prometheus'
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: tcc
+  type: ClusterIP
