@@ -3,15 +3,15 @@ from locust import HttpUser, TaskSet, task, between
 class UserBehavior(TaskSet):
     @task
     def index(self):
-        self.client.get("/")
-
-    @task
-    def actuator(self):
-        self.client.get("/actuator/prometheus")
+        self.client.get("/process")
 
     @task
     def heavy_task(self):
-        self.client.get("/heavy")
+        self.client.get("/compute")
+
+    @task
+    def heavy_task(self):
+        self.client.get("/db")
 
 class WebsiteUser(HttpUser):
     tasks = [UserBehavior]
