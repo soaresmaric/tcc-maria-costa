@@ -28,7 +28,7 @@ spec:
             memory: "512Mi"
         env:
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://jdbc:h2:mem:testdb:3306/org.h2.Driver
+          value: jdbc:h2:mem:testdb
         - name: SPRING_DATASOURCE_USERNAME
           value: sa
         - name: SPRING_DATASOURCE_PASSWORD
