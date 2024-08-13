@@ -10,7 +10,8 @@ metadata:
     prometheus.io/path: '/actuator/prometheus'
 spec:
   ports:
-  - port: 80
+  - name: http
+    port: 80
     targetPort: 8080
     protocol: TCP
   selector:

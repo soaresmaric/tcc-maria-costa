@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: tcc-container
-        image: soaresmaric/tcc:v2
+        image: soaresmaric/tcc:v3
         ports:
         - containerPort: 8080
         resources:

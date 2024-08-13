@@ -4,12 +4,13 @@ import com.tcc.coldstarts.tcc.model.DataEntity;
 import com.tcc.coldstarts.tcc.repository.DataRepository;
 import com.tcc.coldstarts.tcc.service.HeavyLoadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.stream.IntStream;
 
-@RestController
+@RestController("/basepath")
 public class HeavyLoadController {
 
     @Autowired
