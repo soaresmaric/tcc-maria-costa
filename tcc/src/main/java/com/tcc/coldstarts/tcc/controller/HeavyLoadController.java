@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.stream.IntStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController("/basepath")
 public class HeavyLoadController {
@@ -25,9 +27,13 @@ public class HeavyLoadController {
     @GetMapping("/compute")
     public String compute() {
         logger.info("Endpoint /compute chamado.");
-        long result = IntStream.range(1, 1_000_000)
-                .mapToLong(i -> i)
+
+        // Aumentando o uso de CPU com uma operação matemática mais complexa
+        long result = IntStream.range(1, 10_000_000)
+                .parallel()
+                .mapToLong(i -> i * (i - 1) / (i + 1)) // Operação mais pesada
                 .reduce(0, Long::sum);
+
         logger.info("Resultado da computação: {}", result);
         return "Computation Result: " + result;
     }
@@ -35,17 +41,21 @@ public class HeavyLoadController {
     @GetMapping("/process")
     public String process() {
         logger.info("Endpoint /process chamado.");
-        StringBuilder data = new StringBuilder();
-        for (int i = 0; i < 1_000; i++) {
-            data.append("Processing data line ").append(i).append("\n");
+
+        // Aumentando o uso de memória com uma lista grande
+        List<String> data = new ArrayList<>();
+        for (int i = 0; i < 10_000; i++) {
+            data.add("Processing data line " + i + "\n");
         }
-        logger.info("Tamanho dos dados processados: {}", data.length());
-        return "Processed data size: " + data.length();
+
+        logger.info("Tamanho dos dados processados: {}", data.size());
+        return "Processed data size: " + data.size();
     }
 
     @GetMapping("/db")
     public String interactWithDb() {
         logger.info("Endpoint /db chamado. Interagindo com o banco de dados.");
+
         // Simular interação com banco de dados
         DataEntity dataEntity = new DataEntity("Sample data");
         dataRepository.save(dataEntity);
@@ -60,8 +70,25 @@ public class HeavyLoadController {
     @GetMapping("/heavyload")
     public String performHeavyLoad() {
         logger.info("Endpoint /heavyload chamado.");
+
+        // Realizando uma operação de carga pesada, que usa mais CPU
         String result = heavyLoadService.performHeavyLoad();
+
+        // Adicionando uma operação de consumo de memória
+        List<double[]> memoryConsumingList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            memoryConsumingList.add(new double[1_000_000]); // Aloca um array grande
+        }
+
         logger.info("Resultado da carga pesada: {}", result);
         return result;
     }
+    @GetMapping("/memory-leak")
+    public String memoryLeak() {
+        List<int[]> memoryHog = new ArrayList<>();
+        while (true) {
+            memoryHog.add(new int[1000000]); // Aloca 1 milhão de inteiros a cada iteração
+        }
+    }
+
 }
