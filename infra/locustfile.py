@@ -26,4 +26,4 @@ class ColdStartSimulation(HttpUser):
         self.client.get("/compute")
         self.client.get("/process")
         self.client.get("/db")
-        self.client.get("/memory-leak")
+        self.client.get("/heavyload")
