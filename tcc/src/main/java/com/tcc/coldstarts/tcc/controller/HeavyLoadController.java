@@ -83,12 +83,5 @@ public class HeavyLoadController {
         logger.info("Resultado da carga pesada: {}", result);
         return result;
     }
-    @GetMapping("/memory-leak")
-    public String memoryLeak() {
-        List<int[]> memoryHog = new ArrayList<>();
-        while (true) {
-            memoryHog.add(new int[1000000]); // Aloca 1 milhão de inteiros a cada iteração
-        }
-    }
 
 }
