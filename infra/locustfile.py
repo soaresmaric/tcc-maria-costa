@@ -25,5 +25,4 @@ class ColdStartSimulation(HttpUser):
         # Simula o cold start aguardando por um tempo maior na inicialização
         self.client.get("/compute")
         self.client.get("/process")
-        self.client.get("/db")
-        self.client.get("/heavyload")
+        
