@@ -13,13 +13,6 @@ class ColdStartSimulation(HttpUser):
     def process(self):
         self.client.get("/process")
 
-    @task(1)
-    def interact_with_db(self):
-        self.client.get("/db")
-    
-    @task(1)
-    def interact_memory_leak(self):
-        self.client.get("/heavyload")
 
     def on_start(self):
         # Simula o cold start aguardando por um tempo maior na inicialização
