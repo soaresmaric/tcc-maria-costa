@@ -11,12 +11,12 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Etapa 2: Imagem final (Runtime Stage)
-FROM openjdk:17-jdk-alpine
+FROM gcr.io/distroless/java17-debian11
+
 WORKDIR /app
 
 # Defina um usuário não-root para executar a aplicação
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
+USER nonroot
 
 # Copie o JAR gerado na etapa de build para o diretório do aplicativo
 COPY --from=build /app/target/tcc-0.0.1-SNAPSHOT.jar ./app.jar
