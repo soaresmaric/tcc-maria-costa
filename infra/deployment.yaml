@@ -5,7 +5,7 @@ metadata:
   labels:
     app: tcc
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: tcc
@@ -22,12 +22,12 @@ spec:
               - key: kubernetes.io/hostname
                 operator: In
                 values:
-                - tcc-maria-k8s-node-1
                 - tcc-maria-k8s-node-2
-                - tcc-maria-k8s-node-3
+                # Remove a outra opção de nó para garantir que o pod seja agendado apenas no worker desejado.
       containers:
       - name: tcc-container
-        image: soaresmaric/tcc:v5
+        image: soaresmaric/tcc:imagem-pesada
+        imagePullPolicy: Always  # Política de pull ajustada para Always
         ports:
         - containerPort: 8080
         resources:

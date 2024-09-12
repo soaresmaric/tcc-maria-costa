@@ -1,31 +1,22 @@
-# Etapa 1: Construção (Build Stage)
-FROM maven:3.8.4-openjdk-17-slim AS build
+# Etapa única: imagem com cold start
+FROM maven:3.8.4-openjdk-17
+
 WORKDIR /app
 
-# Copie apenas o pom.xml e baixe as dependências
-COPY pom.xml .
-RUN mvn dependency:go-offline
+# Copiar o código-fonte e as dependências
+COPY . .
 
-# Copie o código fonte e construa o projeto
-COPY src ./src
+# Construa o projeto e mantenha todas as dependências
 RUN mvn clean package -DskipTests
 
-# Etapa 2: Imagem final (Runtime Stage)
-FROM openjdk:17-jdk-alpine
-WORKDIR /app
+# Adicionar operações pesadas na inicialização para garantir um cold start
+ENTRYPOINT ["sh", "-c", "\
+echo 'Carregando arquivos pesados...' && \
+dd if=/dev/zero of=/tmp/largefile bs=1M count=1000 && \
+echo 'Executando cálculos custosos...' && \
+for i in $(seq 1 1000000); do echo $i > /dev/null; done && \
+echo 'Iniciando aplicação...' && \
+java -jar target/tcc-0.0.1-SNAPSHOT.jar"]
 
-# Defina um usuário não-root para executar a aplicação
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
-
-# Copie o JAR gerado na etapa de build para o diretório do aplicativo
-COPY --from=build /app/target/tcc-0.0.1-SNAPSHOT.jar ./app.jar
-
-# Exponha a porta em que o Spring Boot está configurado para rodar (8080 por padrão)
+# Expor a porta para a aplicação
 EXPOSE 8080
-
-# Defina variáveis de ambiente (caso necessário)
-ENV SPRING_PROFILES_ACTIVE=prod
-
-# Defina o ponto de entrada para o aplicativo
-ENTRYPOINT ["java", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-jar", "./app.jar"]
