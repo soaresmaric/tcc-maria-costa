@@ -1,0 +1,13 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: tcc-deployment-hpa
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: tcc-deployment  # Nome do deployment que será escalado
+  minReplicas: 1  # Número mínimo de réplicas
+  maxReplicas: 10  # Número máximo de réplicas
+  targetCPUUtilizationPercentage: 50  

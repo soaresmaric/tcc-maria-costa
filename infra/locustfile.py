@@ -1,18 +1,21 @@
 from locust import HttpUser, TaskSet, task, between
 
-class UserBehavior(TaskSet):
-    @task
-    def index(self):
-        self.client.get("/")
+from locust import HttpUser, task, between
 
-    @task
-    def actuator(self):
-        self.client.get("/actuator/prometheus")
+class ColdStartSimulation(HttpUser):
+    wait_time = between(1, 5)  # Aguarda entre 1 e 5 segundos entre as requisições
 
-    @task
-    def heavy_task(self):
-        self.client.get("/heavy")
+    @task(1)
+    def compute(self):
+        self.client.get("/compute")
 
-class WebsiteUser(HttpUser):
-    tasks = [UserBehavior]
-    wait_time = between(1, 5)
+    @task(1)
+    def process(self):
+        self.client.get("/process")
+
+
+    def on_start(self):
+        # Simula o cold start aguardando por um tempo maior na inicialização
+        self.client.get("/compute")
+        self.client.get("/process")
+        
